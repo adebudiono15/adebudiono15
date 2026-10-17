@@ -1,0 +1,475 @@
+{
+ "chunks": [
+  {
+   "start": 0,
+   "end": 20,
+   "words": [
+    {
+     "text": "Bingung",
+     "start": 0
+    },
+    {
+     "text": "beli",
+     "start": 8
+    },
+    {
+     "text": "sepatu",
+     "start": 13
+    }
+   ]
+  },
+  {
+   "start": 20,
+   "end": 62,
+   "words": [
+    {
+     "text": "yang",
+     "start": 20
+    },
+    {
+     "text": "kayak",
+     "start": 31
+    },
+    {
+     "text": "gimana?",
+     "start": 44
+    }
+   ]
+  },
+  {
+   "start": 62,
+   "end": 82,
+   "words": [
+    {
+     "text": "Mending",
+     "start": 62
+    },
+    {
+     "text": "pilih",
+     "start": 70
+    },
+    {
+     "text": "yang",
+     "start": 77
+    }
+   ]
+  },
+  {
+   "start": 82,
+   "end": 95,
+   "words": [
+    {
+     "text": "ini",
+     "start": 82
+    },
+    {
+     "text": "aja!",
+     "start": 88
+    }
+   ]
+  },
+  {
+   "start": 95,
+   "end": 132,
+   "words": [
+    {
+     "text": "Ini",
+     "start": 95
+    },
+    {
+     "text": "tuh",
+     "start": 105
+    },
+    {
+     "text": "sepatu",
+     "start": 115
+    }
+   ]
+  },
+  {
+   "start": 132,
+   "end": 152,
+   "words": [
+    {
+     "text": "yang",
+     "start": 132
+    },
+    {
+     "text": "cocok",
+     "start": 138
+    },
+    {
+     "text": "banget",
+     "start": 144
+    }
+   ]
+  },
+  {
+   "start": 152,
+   "end": 192,
+   "words": [
+    {
+     "text": "buat",
+     "start": 152
+    },
+    {
+     "text": "di",
+     "start": 164
+    },
+    {
+     "text": "outdoor,",
+     "start": 171
+    }
+   ]
+  },
+  {
+   "start": 192,
+   "end": 238,
+   "words": [
+    {
+     "text": "buat",
+     "start": 192
+    },
+    {
+     "text": "berpetualang,",
+     "start": 200
+    },
+    {
+     "text": "hiking",
+     "start": 225
+    }
+   ]
+  },
+  {
+   "start": 238,
+   "end": 275,
+   "words": [
+    {
+     "text": "Bahannya",
+     "start": 239
+    },
+    {
+     "text": "tuh",
+     "start": 256
+    },
+    {
+     "text": "mesh,",
+     "start": 264
+    }
+   ]
+  },
+  {
+   "start": 275,
+   "end": 312,
+   "words": [
+    {
+     "text": "jadi",
+     "start": 275
+    },
+    {
+     "text": "nggak",
+     "start": 286
+    },
+    {
+     "text": "bikin",
+     "start": 299
+    }
+   ]
+  },
+  {
+   "start": 312,
+   "end": 334,
+   "words": [
+    {
+     "text": "gerah",
+     "start": 312
+    },
+    {
+     "text": "di",
+     "start": 321
+    },
+    {
+     "text": "kaki",
+     "start": 326
+    }
+   ]
+  },
+  {
+   "start": 334,
+   "end": 364,
+   "words": [
+    {
+     "text": "Uniknya,",
+     "start": 335
+    },
+    {
+     "text": "ini",
+     "start": 350
+    },
+    {
+     "text": "tuh",
+     "start": 357
+    }
+   ]
+  },
+  {
+   "start": 364,
+   "end": 405,
+   "words": [
+    {
+     "text": "nggak",
+     "start": 364
+    },
+    {
+     "text": "perlu",
+     "start": 374
+    },
+    {
+     "text": "ditali-tali",
+     "start": 384
+    }
+   ]
+  },
+  {
+   "start": 405,
+   "end": 443,
+   "words": [
+    {
+     "text": "Cukup",
+     "start": 406
+    },
+    {
+     "text": "ditarik",
+     "start": 418
+    },
+    {
+     "text": "gini",
+     "start": 433
+    }
+   ]
+  },
+  {
+   "start": 443,
+   "end": 492,
+   "words": [
+    {
+     "text": "aja,",
+     "start": 443
+    },
+    {
+     "text": "effortless",
+     "start": 453
+    },
+    {
+     "text": "banget!",
+     "start": 474
+    }
+   ]
+  },
+  {
+   "start": 492,
+   "end": 531,
+   "words": [
+    {
+     "text": "Terus",
+     "start": 493
+    },
+    {
+     "text": "harganya",
+     "start": 505
+    },
+    {
+     "text": "ini",
+     "start": 523
+    }
+   ]
+  },
+  {
+   "start": 531,
+   "end": 573,
+   "words": [
+    {
+     "text": "terjangkau,",
+     "start": 531
+    },
+    {
+     "text": "ekonomis!",
+     "start": 553
+    }
+   ]
+  },
+  {
+   "start": 573,
+   "end": 600,
+   "words": [
+    {
+     "text": "Belakangnya",
+     "start": 573
+    },
+    {
+     "text": "pastinya",
+     "start": 588
+    }
+   ]
+  },
+  {
+   "start": 600,
+   "end": 635,
+   "words": [
+    {
+     "text": "udah",
+     "start": 600
+    },
+    {
+     "text": "anti",
+     "start": 611
+    },
+    {
+     "text": "slip",
+     "start": 623
+    }
+   ]
+  },
+  {
+   "start": 635,
+   "end": 677,
+   "words": [
+    {
+     "text": "Mau",
+     "start": 635
+    },
+    {
+     "text": "ditekuk",
+     "start": 642
+    },
+    {
+     "text": "segimanapun,",
+     "start": 655
+    }
+   ]
+  },
+  {
+   "start": 677,
+   "end": 713,
+   "words": [
+    {
+     "text": "ini",
+     "start": 677
+    },
+    {
+     "text": "bakalan",
+     "start": 685
+    },
+    {
+     "text": "balik",
+     "start": 701
+    }
+   ]
+  },
+  {
+   "start": 713,
+   "end": 741,
+   "words": [
+    {
+     "text": "lagi",
+     "start": 713
+    },
+    {
+     "text": "kayak",
+     "start": 721
+    },
+    {
+     "text": "gini",
+     "start": 731
+    }
+   ]
+  },
+  {
+   "start": 741,
+   "end": 771,
+   "words": [
+    {
+     "text": "Kalau",
+     "start": 741
+    },
+    {
+     "text": "gak",
+     "start": 750
+    },
+    {
+     "text": "percaya,",
+     "start": 757
+    }
+   ]
+  },
+  {
+   "start": 771,
+   "end": 797,
+   "words": [
+    {
+     "text": "buruan",
+     "start": 771
+    },
+    {
+     "text": "cek",
+     "start": 784
+    },
+    {
+     "text": "di",
+     "start": 791
+    }
+   ]
+  },
+  {
+   "start": 797,
+   "end": 820,
+   "words": [
+    {
+     "text": "keranjang",
+     "start": 797
+    },
+    {
+     "text": "video",
+     "start": 808
+    },
+    {
+     "text": "ini,",
+     "start": 815
+    }
+   ]
+  },
+  {
+   "start": 820,
+   "end": 900,
+   "words": [
+    {
+     "text": "mumpung",
+     "start": 820
+    },
+    {
+     "text": "lagi",
+     "start": 835
+    },
+    {
+     "text": "banyak",
+     "start": 844
+    },
+    {
+     "text": "promo!",
+     "start": 856
+    }
+   ]
+  }
+ ],
+ "clipFrames": [
+  95,
+  143,
+  96,
+  71,
+  87,
+  81,
+  62,
+  106,
+  128
+ ]
+}
