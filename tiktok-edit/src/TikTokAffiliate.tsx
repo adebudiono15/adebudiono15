@@ -96,7 +96,7 @@ const strokeText: React.CSSProperties = {
   fontFamily: FONT,
   fontWeight: 900,
   color: "white",
-  WebkitTextStroke: "12px black",
+  WebkitTextStroke: "9px black",
   paintOrder: "stroke fill",
   textShadow: "0 6px 18px rgba(0,0,0,0.55)",
 };
@@ -110,16 +110,16 @@ const Caption: React.FC<{ chunk: Chunk }> = ({ chunk }) => {
   const pop = spring({ frame: frame - chunk.start, fps, config: { damping: 12, stiffness: 220, mass: 0.6 } });
   const scale = interpolate(pop, [0, 1], [0.6, 1]);
   return (
-    <AbsoluteFill style={{ top: 1250, height: 260, left: 70, width: 860, alignItems: "center" }}>
+    <AbsoluteFill style={{ top: 1290, height: 220, left: 70, width: 860, alignItems: "center" }}>
       <div
         style={{
           ...strokeText,
-          fontSize: 74,
+          fontSize: 54,
           lineHeight: 1.15,
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "center",
-          columnGap: 34,
+          columnGap: 22,
           width: 860,
           transform: `scale(${scale})`,
           textTransform: "uppercase",
@@ -159,15 +159,15 @@ const Hook: React.FC = () => {
   const shake = frame < 12 ? Math.sin(frame * 2.6) * (12 - frame) * 1.4 : 0;
   return (
     <AbsoluteFill style={{ top: 660, alignItems: "center", transform: `translateX(${shake}px)` }}>
-      <div style={{ ...strokeText, fontSize: 96, transform: `scale(${a}) rotate(-3deg)` }}>SEPATU OUTDOOR</div>
+      <div style={{ ...strokeText, fontSize: 68, transform: `scale(${a}) rotate(-3deg)` }}>SEPATU OUTDOOR</div>
       <div
         style={{
           fontFamily: FONT,
           fontWeight: 900,
-          fontSize: 92,
+          fontSize: 62,
           color: "black",
           background: YELLOW,
-          padding: "6px 30px 10px",
+          padding: "4px 22px 8px",
           borderRadius: 18,
           marginTop: 8,
           transform: `scale(${b}) rotate(2deg)`,
@@ -191,12 +191,12 @@ const Badge: React.FC<{ text: string; frames: number }> = ({ text, frames }) => 
         style={{
           fontFamily: FONT,
           fontWeight: 900,
-          fontSize: 64,
+          fontSize: 44,
           color: "#111",
           background: "white",
-          padding: "16px 34px",
+          padding: "12px 26px",
           borderRadius: 999,
-          border: `6px solid ${YELLOW}`,
+          border: `5px solid ${YELLOW}`,
           boxShadow: "0 12px 30px rgba(0,0,0,0.4)",
           transform: `translateX(${x}px) rotate(-2deg)`,
           opacity: exit,
@@ -222,12 +222,12 @@ const CTA: React.FC = () => {
           style={{
             fontFamily: FONT,
             fontWeight: 900,
-            fontSize: 80,
+            fontSize: 56,
             lineHeight: 1.05,
             textAlign: "center",
             color: "black",
             background: YELLOW,
-            padding: "18px 36px 22px",
+            padding: "12px 28px 16px",
             borderRadius: 24,
             transform: `scale(${a * pulse}) rotate(-2deg)`,
             boxShadow: "0 14px 34px rgba(0,0,0,0.5)",
@@ -242,9 +242,9 @@ const CTA: React.FC = () => {
         style={{
           ...strokeText,
           position: "absolute",
-          left: 250,
+          left: 200,
           top: 1500,
-          fontSize: 56,
+          fontSize: 40,
           transform: `scale(${b})`,
           transformOrigin: "left center",
         }}
@@ -256,7 +256,7 @@ const CTA: React.FC = () => {
           position: "absolute",
           left: 120,
           top: 1430 + bounce,
-          fontSize: 130,
+          fontSize: 90,
           fontFamily: FONT,
           opacity: b,
           filter: "drop-shadow(0 8px 14px rgba(0,0,0,0.5))",
@@ -328,17 +328,17 @@ export const TikTokAffiliate: React.FC = () => {
       </Sequence>
 
       {/* SFX: boom on the hook, whoosh on every cut, pop/ka-ching on callouts, soft tick on caption changes */}
-      <Sfx at={0} name="boom" volume={0.38} />
+      <Sfx at={0} name="boom" volume={0.22} />
       {cutFrames.map((f) => (
-        <Sfx key={`w${f}`} at={f - 6} name="whoosh" volume={0.26} />
+        <Sfx key={`w${f}`} at={f - 6} name="whoosh" volume={0.12} />
       ))}
       {callouts.map((c) => (
-        <Sfx key={`p${c.text}`} at={clipTimeline[c.clip].start + 3} name={c.sfx} volume={c.sfx === "kaching" ? 0.45 : 0.5} />
+        <Sfx key={`p${c.text}`} at={clipTimeline[c.clip].start + 3} name={c.sfx} volume={c.sfx === "kaching" ? 0.2 : 0.16} />
       ))}
-      <Sfx at={clipTimeline[CTA_CLIP].start} name="ding" volume={0.5} />
-      <Sfx at={clipTimeline[CTA_CLIP].start + 10} name="pop" volume={0.45} />
+      <Sfx at={clipTimeline[CTA_CLIP].start} name="ding" volume={0.18} />
+      <Sfx at={clipTimeline[CTA_CLIP].start + 10} name="pop" volume={0.15} />
       {tickFrames.map((f) => (
-        <Sfx key={`t${f}`} at={f} name="tick" volume={0.14} />
+        <Sfx key={`t${f}`} at={f} name="tick" volume={0.05} />
       ))}
     </AbsoluteFill>
   );

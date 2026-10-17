@@ -8,7 +8,8 @@ Word-by-word captions, feature badges, and SFX on every clip cut (whoosh), callo
 ## Rebuild
 
 1. Put the source footage at `public/source.mp4` (H.264, 30fps):
-   `ffmpeg -i input.mov -vf fps=30 -c:v libx264 -crf 14 -pix_fmt yuv420p -af "highpass=f=80,afftdn=nf=-28" -c:a aac -ar 48000 public/source.mp4`
+   `ffmpeg -i input.mov -vf fps=30 -c:v libx264 -crf 14 -pix_fmt yuv420p -af "highpass=f=80,afftdn=nf=-28,acompressor=threshold=-30dB:ratio=3:attack=5:release=120:makeup=6dB,loudnorm=I=-14:TP=-1.5:LRA=7" -c:a aac -ar 48000 public/source.mp4`
+   (the raw phone audio is very quiet, so the voice is compressed and boosted to sit above the SFX)
 2. `python3 scripts/gen-sfx.py public/sfx` — synthesizes the SFX.
 3. `python3 scripts/captions.py src/plan.json <audio16k.wav> src/captions.json` — caption timings (cut list lives in `src/plan.json`).
 4. `npm run render -- --browser-executable=<chromium headless shell>`
