@@ -6,23 +6,26 @@ import {
   OffthreadVideo,
   Sequence,
   interpolate,
-  spring,
   staticFile,
   useCurrentFrame,
-  useVideoConfig,
 } from "remotion";
 import plan from "./plan.json";
 import captions from "./captions.json";
 
 const SOURCE = staticFile("source.mp4");
-const GRADE = "contrast(1.07) saturate(1.15) brightness(1.03)";
+const GRADE = "contrast(1.05) saturate(1.08) brightness(1.02)";
 const YELLOW = "#FFE34D";
 
 const fontFaces = `
 @font-face { font-family: 'Montserrat'; font-weight: 800; src: url(${staticFile("fonts/montserrat-latin-800-normal.woff2")}) format('woff2'); }
 @font-face { font-family: 'Montserrat'; font-weight: 900; src: url(${staticFile("fonts/montserrat-latin-900-normal.woff2")}) format('woff2'); }
 `;
-const FONT = "'Montserrat', 'Noto Color Emoji', sans-serif";
+const FONT = "'Montserrat', sans-serif";
+
+// Top-left anchor for the hook, feature points and CTA: clear of the face
+// (centered) and of TikTok's own UI (top tabs, right-hand buttons).
+const LEFT = 56;
+const TOP = 230;
 
 // Where each A-roll clip lands on the 900-frame timeline. The last clip runs to
 // the end so the CTA holds after the voice stops.
@@ -38,24 +41,33 @@ const clipTimeline = plan.clips.map((c, i) => ({
 
 type Callout = { clip: number; text: string; sfx: "pop" | "kaching" };
 const callouts: Callout[] = [
-  { clip: 1, text: "🏔️ OUTDOOR & HIKING", sfx: "pop" },
-  { clip: 2, text: "🌬️ BAHAN MESH, ADEM", sfx: "pop" },
-  { clip: 3, text: "🚫 GAK PERLU DITALI", sfx: "pop" },
-  { clip: 4, text: "⚡ TINGGAL TARIK!", sfx: "pop" },
-  { clip: 5, text: "💸 HARGA EKONOMIS", sfx: "kaching" },
-  { clip: 6, text: "✅ SOL ANTI SLIP", sfx: "pop" },
-  { clip: 7, text: "💪 LENTUR & KOKOH", sfx: "pop" },
+  { clip: 1, text: "Outdoor & hiking", sfx: "pop" },
+  { clip: 2, text: "Bahan mesh, adem", sfx: "pop" },
+  { clip: 3, text: "Gak perlu ditali", sfx: "pop" },
+  { clip: 4, text: "Tinggal tarik", sfx: "pop" },
+  { clip: 5, text: "Harga ekonomis", sfx: "kaching" },
+  { clip: 6, text: "Sol anti slip", sfx: "pop" },
+  { clip: 7, text: "Lentur & kokoh", sfx: "pop" },
 ];
 const CTA_CLIP = 8;
 
-// Every A-roll clip: a punch-in on the cut plus a slow push so no shot sits still.
+const ease = { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) } as const;
+
+// Fade/slide in over a few frames and fade out at the end: enough motion to feel alive, never jumpy.
+const useSoftInOut = (frames: number, inFrames = 8, outFrames = 6) => {
+  const frame = useCurrentFrame();
+  const enter = interpolate(frame, [0, inFrames], [0, 1], ease);
+  const exit = interpolate(frame, [frames - outFrames, frames], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  return { opacity: Math.min(enter, exit), enter };
+};
+
+// A-roll clips alternate between two framings (classic jump-cut) with a slow push-in.
 const ARollClip: React.FC<{ from: number; frames: number; index: number }> = ({ from, frames, index }) => {
   const frame = useCurrentFrame();
-  const punch = interpolate(frame, [0, 7], [1.12, 1], { extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
-  const push = interpolate(frame, [0, frames], [1, 1.05]);
-  const base = index % 2 === 1 ? 1.08 : 1;
+  const push = interpolate(frame, [0, frames], [1, 1.03]);
+  const base = index % 2 === 1 ? 1.05 : 1;
   return (
-    <AbsoluteFill style={{ transform: `scale(${punch * push * base})`, transformOrigin: "50% 62%" }}>
+    <AbsoluteFill style={{ transform: `scale(${push * base})`, transformOrigin: "50% 60%" }}>
       <OffthreadVideo
         src={SOURCE}
         trimBefore={Math.round(from * plan.fps)}
@@ -66,13 +78,11 @@ const ARollClip: React.FC<{ from: number; frames: number; index: number }> = ({ 
   );
 };
 
-// Close-up product cutaways laid over the talking clips (voice keeps playing underneath).
+// Close-up product cutaways over the talking clips (voice keeps playing underneath), cross-faded in and out.
 const BRoll: React.FC<{ from: number; frames: number }> = ({ from, frames }) => {
   const frame = useCurrentFrame();
-  const scale = interpolate(frame, [0, 8, frames], [1.2, 1.04, 1.1], {
-    easing: Easing.out(Easing.cubic),
-  });
-  const opacity = interpolate(frame, [0, 3], [0, 1], { extrapolateRight: "clamp" });
+  const { opacity } = useSoftInOut(frames, 6, 5);
+  const scale = interpolate(frame, [0, frames], [1.02, 1.07]);
   return (
     <AbsoluteFill style={{ opacity, transform: `scale(${scale})` }}>
       <OffthreadVideo
@@ -85,57 +95,44 @@ const BRoll: React.FC<{ from: number; frames: number }> = ({ from, frames }) => 
   );
 };
 
-// White flash on every hard cut to sell the transition.
-const Flash: React.FC = () => {
-  const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 4], [0.35, 0], { extrapolateRight: "clamp" });
-  return <AbsoluteFill style={{ backgroundColor: "white", opacity }} />;
-};
-
-const strokeText: React.CSSProperties = {
+const shadowText: React.CSSProperties = {
   fontFamily: FONT,
-  fontWeight: 900,
+  fontWeight: 800,
   color: "white",
-  WebkitTextStroke: "9px black",
+  WebkitTextStroke: "5px rgba(0,0,0,0.85)",
   paintOrder: "stroke fill",
-  textShadow: "0 6px 18px rgba(0,0,0,0.55)",
+  textShadow: "0 2px 10px rgba(0,0,0,0.45)",
 };
 
 type Chunk = (typeof captions.chunks)[number];
 
-// Word-by-word captions: the chunk pops in, the spoken word turns yellow.
+// Captions in sentence case; the spoken word is tinted yellow.
 const Caption: React.FC<{ chunk: Chunk }> = ({ chunk }) => {
   const frame = useCurrentFrame() + chunk.start;
-  const { fps } = useVideoConfig();
-  const pop = spring({ frame: frame - chunk.start, fps, config: { damping: 12, stiffness: 220, mass: 0.6 } });
-  const scale = interpolate(pop, [0, 1], [0.6, 1]);
+  const local = frame - chunk.start;
+  const opacity = interpolate(local, [0, 4], [0, 1], ease);
+  const y = interpolate(local, [0, 4], [8, 0], ease);
   return (
-    <AbsoluteFill style={{ top: 1290, height: 220, left: 70, width: 860, alignItems: "center" }}>
+    <AbsoluteFill style={{ top: 1300, height: 200, left: 90, width: 820, alignItems: "center" }}>
       <div
         style={{
-          ...strokeText,
-          fontSize: 54,
-          lineHeight: 1.15,
+          ...shadowText,
+          fontSize: 44,
+          lineHeight: 1.2,
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "center",
-          columnGap: 22,
-          width: 860,
-          transform: `scale(${scale})`,
-          textTransform: "uppercase",
+          columnGap: 14,
+          width: 820,
+          opacity,
+          transform: `translateY(${y}px)`,
         }}
       >
         {chunk.words.map((w, i) => {
           const next = chunk.words[i + 1]?.start ?? chunk.end;
           const active = frame >= w.start && frame < next;
           return (
-            <span
-              key={i}
-              style={{
-                color: active ? YELLOW : "white",
-                transform: `translateY(${active ? -4 : 0}px)`,
-              }}
-            >
+            <span key={i} style={{ color: active ? YELLOW : "white" }}>
               {w.text}
             </span>
           );
@@ -145,124 +142,104 @@ const Caption: React.FC<{ chunk: Chunk }> = ({ chunk }) => {
   );
 };
 
-const useEntrance = (delay = 0) => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  return spring({ frame: frame - delay, fps, config: { damping: 11, stiffness: 180, mass: 0.7 } });
-};
+const TopLeft: React.FC<{ children: React.ReactNode; opacity: number; enter: number }> = ({ children, opacity, enter }) => (
+  <div
+    style={{
+      position: "absolute",
+      left: LEFT,
+      top: TOP,
+      opacity,
+      transform: `translateX(${interpolate(enter, [0, 1], [-24, 0])}px)`,
+    }}
+  >
+    {children}
+  </div>
+);
 
-// Hook in the first 3 seconds: big headline with a shake on the boom.
-const Hook: React.FC = () => {
-  const frame = useCurrentFrame();
-  const a = useEntrance();
-  const b = useEntrance(6);
-  const shake = frame < 12 ? Math.sin(frame * 2.6) * (12 - frame) * 1.4 : 0;
+const Hook: React.FC<{ frames: number }> = ({ frames }) => {
+  const { opacity, enter } = useSoftInOut(frames, 10);
   return (
-    <AbsoluteFill style={{ top: 660, alignItems: "center", transform: `translateX(${shake}px)` }}>
-      <div style={{ ...strokeText, fontSize: 68, transform: `scale(${a}) rotate(-3deg)` }}>SEPATU OUTDOOR</div>
+    <TopLeft opacity={opacity} enter={enter}>
+      <div style={{ ...shadowText, fontSize: 46, lineHeight: 1.15 }}>Sepatu outdoor</div>
       <div
         style={{
+          display: "inline-block",
+          marginTop: 6,
           fontFamily: FONT,
-          fontWeight: 900,
-          fontSize: 62,
-          color: "black",
+          fontWeight: 800,
+          fontSize: 42,
+          color: "#111",
           background: YELLOW,
-          padding: "4px 22px 8px",
-          borderRadius: 18,
-          marginTop: 8,
-          transform: `scale(${b}) rotate(2deg)`,
-          boxShadow: "0 10px 30px rgba(0,0,0,0.45)",
+          padding: "2px 14px 6px",
+          borderRadius: 10,
         }}
       >
-        TANPA TALI?! 😱
+        tanpa tali?
       </div>
-    </AbsoluteFill>
+    </TopLeft>
   );
 };
 
 const Badge: React.FC<{ text: string; frames: number }> = ({ text, frames }) => {
-  const frame = useCurrentFrame();
-  const enter = useEntrance();
-  const exit = interpolate(frame, [frames - 5, frames], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const x = interpolate(enter, [0, 1], [-700, 0]);
+  const { opacity, enter } = useSoftInOut(frames);
   return (
-    <AbsoluteFill style={{ top: 720, alignItems: "center" }}>
+    <TopLeft opacity={opacity} enter={enter}>
       <div
         style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 14,
           fontFamily: FONT,
-          fontWeight: 900,
-          fontSize: 44,
+          fontWeight: 800,
+          fontSize: 34,
           color: "#111",
-          background: "white",
-          padding: "12px 26px",
-          borderRadius: 999,
-          border: `5px solid ${YELLOW}`,
-          boxShadow: "0 12px 30px rgba(0,0,0,0.4)",
-          transform: `translateX(${x}px) rotate(-2deg)`,
-          opacity: exit,
+          background: "rgba(255,255,255,0.94)",
+          padding: "10px 22px 12px 14px",
+          borderRadius: 12,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
         }}
       >
+        <div style={{ width: 6, height: 34, borderRadius: 3, background: YELLOW }} />
         {text}
       </div>
-    </AbsoluteFill>
+    </TopLeft>
   );
 };
 
-// Closing call to action pointing at the product link (yellow basket) bottom-left.
-const CTA: React.FC = () => {
+const DownArrow: React.FC = () => (
+  <svg width="44" height="56" viewBox="0 0 44 56" style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.5))" }}>
+    <path d="M22 4 V44 M6 30 L22 48 L38 30" stroke={YELLOW} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+  </svg>
+);
+
+// Closing call to action, plus a small arrow toward the product link bottom-left.
+const CTA: React.FC<{ frames: number }> = ({ frames }) => {
   const frame = useCurrentFrame();
-  const a = useEntrance();
-  const b = useEntrance(10);
-  const pulse = 1 + Math.sin(frame / 4) * 0.035;
-  const bounce = Math.abs(Math.sin(frame / 5)) * 34;
+  const { enter } = useSoftInOut(frames + 10, 10);
+  const sub = interpolate(frame, [10, 18], [0, 1], ease);
+  const bob = Math.sin(frame / 7) * 6;
   return (
     <AbsoluteFill>
-      <AbsoluteFill style={{ top: 170, alignItems: "center" }}>
+      <TopLeft opacity={enter} enter={enter}>
         <div
           style={{
+            display: "inline-block",
             fontFamily: FONT,
-            fontWeight: 900,
-            fontSize: 56,
-            lineHeight: 1.05,
-            textAlign: "center",
-            color: "black",
+            fontWeight: 800,
+            fontSize: 40,
+            color: "#111",
             background: YELLOW,
-            padding: "12px 28px 16px",
-            borderRadius: 24,
-            transform: `scale(${a * pulse}) rotate(-2deg)`,
-            boxShadow: "0 14px 34px rgba(0,0,0,0.5)",
+            padding: "8px 20px 12px",
+            borderRadius: 12,
+            boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
           }}
         >
-          CEK KERANJANG
-          <br />
-          KUNING 🛒
+          Cek keranjang kuning
         </div>
-      </AbsoluteFill>
-      <div
-        style={{
-          ...strokeText,
-          position: "absolute",
-          left: 200,
-          top: 1500,
-          fontSize: 40,
-          transform: `scale(${b})`,
-          transformOrigin: "left center",
-        }}
-      >
-        LAGI BANYAK PROMO 🔥
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          left: 120,
-          top: 1430 + bounce,
-          fontSize: 90,
-          fontFamily: FONT,
-          opacity: b,
-          filter: "drop-shadow(0 8px 14px rgba(0,0,0,0.5))",
-        }}
-      >
-        👇
+        <div style={{ ...shadowText, fontSize: 32, marginTop: 10, opacity: sub }}>Lagi banyak promo</div>
+      </TopLeft>
+      <div style={{ position: "absolute", left: 70, top: 1440 + bob, opacity: sub }}>
+        <DownArrow />
       </div>
     </AbsoluteFill>
   );
@@ -283,6 +260,7 @@ export const TikTokAffiliate: React.FC = () => {
   const tickFrames = captions.chunks
     .map((c) => c.start)
     .filter((f) => f > 0 && !cutFrames.includes(f) && !calloutFrames.has(f));
+  const ctaStart = clipTimeline[CTA_CLIP].start;
 
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
@@ -300,12 +278,6 @@ export const TikTokAffiliate: React.FC = () => {
         </Sequence>
       ))}
 
-      {cutFrames.map((f) => (
-        <Sequence key={`f${f}`} from={f} durationInFrames={5}>
-          <Flash />
-        </Sequence>
-      ))}
-
       {captions.chunks.map((ch, i) => (
         <Sequence key={`c${i}`} from={ch.start} durationInFrames={ch.end - ch.start}>
           <Caption chunk={ch} />
@@ -313,7 +285,7 @@ export const TikTokAffiliate: React.FC = () => {
       ))}
 
       <Sequence from={0} durationInFrames={clipTimeline[1].start}>
-        <Hook />
+        <Hook frames={clipTimeline[1].start} />
       </Sequence>
       {callouts.map((c) => {
         const clip = clipTimeline[c.clip];
@@ -323,22 +295,21 @@ export const TikTokAffiliate: React.FC = () => {
           </Sequence>
         );
       })}
-      <Sequence from={clipTimeline[CTA_CLIP].start}>
-        <CTA />
+      <Sequence from={ctaStart}>
+        <CTA frames={plan.durationInFrames - ctaStart} />
       </Sequence>
 
-      {/* SFX: boom on the hook, whoosh on every cut, pop/ka-ching on callouts, soft tick on caption changes */}
-      <Sfx at={0} name="boom" volume={0.22} />
+      {/* SFX kept quiet under the voice: whoosh on cuts, pop/ka-ching on points, soft tick on caption changes */}
+      <Sfx at={0} name="pop" volume={0.14} />
       {cutFrames.map((f) => (
-        <Sfx key={`w${f}`} at={f - 6} name="whoosh" volume={0.12} />
+        <Sfx key={`w${f}`} at={f - 6} name="whoosh" volume={0.08} />
       ))}
       {callouts.map((c) => (
-        <Sfx key={`p${c.text}`} at={clipTimeline[c.clip].start + 3} name={c.sfx} volume={c.sfx === "kaching" ? 0.2 : 0.16} />
+        <Sfx key={`p${c.text}`} at={clipTimeline[c.clip].start + 3} name={c.sfx} volume={c.sfx === "kaching" ? 0.16 : 0.12} />
       ))}
-      <Sfx at={clipTimeline[CTA_CLIP].start} name="ding" volume={0.18} />
-      <Sfx at={clipTimeline[CTA_CLIP].start + 10} name="pop" volume={0.15} />
+      <Sfx at={ctaStart} name="ding" volume={0.15} />
       {tickFrames.map((f) => (
-        <Sfx key={`t${f}`} at={f} name="tick" volume={0.05} />
+        <Sfx key={`t${f}`} at={f} name="tick" volume={0.04} />
       ))}
     </AbsoluteFill>
   );

@@ -3,7 +3,7 @@
 30-second vertical (1080x1920, 30fps) edit of a sneaker review for TikTok Shop affiliate.
 
 Structure: hook (0–3s) → feature cuts with close-up product B-roll → CTA "cek keranjang kuning".
-Word-by-word captions, feature badges, and SFX on every clip cut (whoosh), callout (pop / ka-ching), and caption change (tick).
+Sentence-case captions with the spoken word tinted, small top-left feature points (no emoji), soft cross-fade cutaways, and quiet SFX on every clip cut (whoosh), point (pop / ka-ching), and caption change (tick).
 
 ## Rebuild
 
