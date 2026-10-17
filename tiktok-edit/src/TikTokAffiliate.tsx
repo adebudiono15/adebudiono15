@@ -11,16 +11,10 @@ import {
 } from "remotion";
 import plan from "./plan.json";
 import captions from "./captions.json";
+import { CoverArt } from "./Cover";
+import { FONT, GRADE, YELLOW, fontFaces } from "./theme";
 
 const SOURCE = staticFile("source.mp4");
-const GRADE = "contrast(1.05) saturate(1.08) brightness(1.02)";
-const YELLOW = "#FFE34D";
-
-const fontFaces = `
-@font-face { font-family: 'Montserrat'; font-weight: 800; src: url(${staticFile("fonts/montserrat-latin-800-normal.woff2")}) format('woff2'); }
-@font-face { font-family: 'Montserrat'; font-weight: 900; src: url(${staticFile("fonts/montserrat-latin-900-normal.woff2")}) format('woff2'); }
-`;
-const FONT = "'Montserrat', sans-serif";
 
 // Top-left anchor for the hook, feature points and CTA: clear of the face
 // (centered) and of TikTok's own UI (top tabs, right-hand buttons).
@@ -251,7 +245,7 @@ const Sfx: React.FC<{ at: number; name: string; volume: number }> = ({ at, name,
   </Sequence>
 );
 
-export const TikTokAffiliate: React.FC = () => {
+const Edit: React.FC = () => {
   const cutFrames = [
     ...clipTimeline.slice(1).map((c) => c.start),
     ...plan.broll.flatMap((b) => [b.atFrame, b.atFrame + b.frames]).filter((f) => f < plan.durationInFrames),
@@ -314,3 +308,29 @@ export const TikTokAffiliate: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
+// The cover opens the video for a split second (so it can be picked as the TikTok
+// cover frame) and fades into the edit, which is shifted back by the same amount.
+const CoverIntro: React.FC = () => {
+  const frame = useCurrentFrame();
+  const opacity = interpolate(frame, [plan.cover.frames - 2, plan.cover.frames + 6], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return (
+    <AbsoluteFill style={{ opacity }}>
+      <CoverArt />
+    </AbsoluteFill>
+  );
+};
+
+export const TikTokAffiliate: React.FC = () => (
+  <AbsoluteFill style={{ backgroundColor: "black" }}>
+    <Sequence from={plan.cover.frames}>
+      <Edit />
+    </Sequence>
+    <Sequence from={0} durationInFrames={plan.cover.frames + 6}>
+      <CoverIntro />
+    </Sequence>
+  </AbsoluteFill>
+);
