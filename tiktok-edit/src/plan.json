@@ -1,0 +1,81 @@
+{
+  "fps": 30,
+  "durationInFrames": 900,
+  "speed": 1.04,
+  "clips": [
+    {
+      "from": 0.0,
+      "to": 3.3,
+      "text": "Bingung beli sepatu yang kayak gimana? Mending pilih yang ini aja!"
+    },
+    {
+      "from": 3.36,
+      "to": 8.33,
+      "text": "Ini tuh sepatu yang cocok banget buat di outdoor, buat berpetualang, hiking"
+    },
+    {
+      "from": 13.53,
+      "to": 16.87,
+      "text": "Bahannya tuh mesh, jadi nggak bikin gerah di kaki"
+    },
+    {
+      "from": 20.03,
+      "to": 22.49,
+      "text": "Uniknya, ini tuh nggak perlu ditali-tali"
+    },
+    {
+      "from": 22.64,
+      "to": 25.65,
+      "text": "Cukup ditarik gini aja, effortless banget!"
+    },
+    {
+      "from": 33.43,
+      "to": 36.25,
+      "text": "Terus harganya ini terjangkau, ekonomis!"
+    },
+    {
+      "from": 37.95,
+      "to": 40.1,
+      "text": "Belakangnya pastinya udah anti slip"
+    },
+    {
+      "from": 40.59,
+      "to": 44.25,
+      "text": "Mau ditekuk segimanapun, ini bakalan balik lagi kayak gini"
+    },
+    {
+      "from": 48.0,
+      "to": 52.45,
+      "text": "Kalau gak percaya, buruan cek di keranjang video ini, mumpung lagi banyak promo!"
+    }
+  ],
+  "broll": [
+    {
+      "atFrame": 175,
+      "from": 54.0,
+      "frames": 63
+    },
+    {
+      "atFrame": 268,
+      "from": 60.0,
+      "frames": 48
+    },
+    {
+      "atFrame": 590,
+      "from": 57.2,
+      "frames": 45
+    },
+    {
+      "atFrame": 855,
+      "from": 70.6,
+      "frames": 45
+    }
+  ],
+  "cover": {
+    "frameAt": 52.7,
+    "frames": 12,
+    "kicker": "Sepatu hiking tanpa tali",
+    "headline": "Tebak harganya berapa?",
+    "footer": "Tulis tebakanmu di komen"
+  }
+}
